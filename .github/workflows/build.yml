@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Configure dependencies
+      run: sudo dpkg --add-architecture i386 && sudo apt-get -qq update
     - name: Install dependencies
       run: sudo apt-get install -y libxcb-shape0-dev:i386 libxcb-xfixes0-dev:i386 libxcb-render0-dev:i386
     - name: Install target
