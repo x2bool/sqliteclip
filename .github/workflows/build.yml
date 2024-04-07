@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
-      run: sudo apt-get install -y libxcb-xfixes0-dev libxcb-xfixes0-dev
+      run: sudo apt-get install -y libxcb-shape0-dev libxcb-xfixes0-dev
     - name: Build debug
       run: cargo build --verbose
     - name: Run tests
@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: sudo apt-get install -y libxcb-shape0-dev:i386 libxcb-xfixes0-dev:i386 libxcb-render0-dev:i386
     - name: Install target
       run: sudo apt install -y gcc-multilib && rustup target install i686-unknown-linux-gnu
     - name: Build release
