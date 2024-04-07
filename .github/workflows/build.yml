@@ -45,23 +45,6 @@ jobs:
         name: linux-x86
         path: target/i686-unknown-linux-gnu/release/libsqliteclip.so
 
-  build-linux-aarch64:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Configure dependencies
-      run: sudo dpkg --add-architecture arm64 && sudo cp -f ./build/sources.list /etc/apt/sources.list && sudo apt-get -qq update
-    - name: Install dependencies
-      run: sudo apt-get install -y libxcb-shape0-dev:arm64 libxcb-xfixes0-dev:arm64 libxcb-render0-dev:arm64
-    - name: Install target
-      run: sudo apt install -y gcc-aarch64-linux-gnu && rustup target install aarch64-unknown-linux-gnu
-    - name: Build release
-      run: cargo build --release --target=aarch64-unknown-linux-gnu
-    - uses: actions/upload-artifact@v3
-      with:
-        name: linux-aarch64
-        path: target/aarch64-unknown-linux-gnu/release/libsqliteclip.so
-
   build-windows-x64:
     runs-on: windows-latest
     steps:
@@ -124,7 +107,6 @@ jobs:
     needs:
     - build-linux-x64
     - build-linux-x86
-    - build-linux-aarch64
     - build-windows-x64
     - build-windows-x86
     - build-macos-x64
@@ -141,8 +123,6 @@ jobs:
       run: mv linux-x64/libsqliteclip.so ./libsqliteclip.so && tar -zcvf libsqliteclip-linux-x64.tar.gz libsqliteclip.so && rm libsqliteclip.so
     - name: Archive linux-x86
       run: mv linux-x86/libsqliteclip.so ./libsqliteclip.so && tar -zcvf libsqliteclip-linux-x86.tar.gz libsqliteclip.so && rm libsqliteclip.so
-    - name: Archive linux-aarch64
-      run: mv linux-aarch64/libsqliteclip.so ./libsqliteclip.so && tar -zcvf libsqliteclip-linux-aarch64.tar.gz libsqliteclip.so && rm libsqliteclip.so
     - name: Archive windows-x64
       run: mv windows-x64/sqliteclip.dll ./sqliteclip.dll && zip sqliteclip-windows-x64.zip sqliteclip.dll && rm sqliteclip.dll
     - name: Archive windows-x86
@@ -182,16 +162,6 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./libsqliteclip-linux-x86.tar.gz
         asset_name: libsqliteclip-linux-x86.tar.gz
-        asset_content_type: application/octet-stream
-
-    - name: Upload linux-aarch64 artifact
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./libsqliteclip-linux-aarch64.tar.gz
-        asset_name: libsqliteclip-linux-aarch64.tar.gz
         asset_content_type: application/octet-stream
 
     - name: Upload windows-x64 artifact
