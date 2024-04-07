@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Bindgen
-      run: rustup run nightly cbindgen --config cbindgen.toml
+      run: rustup toolchain install nightly && rustup run nightly cbindgen --config cbindgen.toml
     - name: Build debug
       run: cargo build --verbose
     - name: Run tests
@@ -35,7 +35,7 @@ jobs:
     - name: Install target
       run: sudo apt install -y gcc-multilib && rustup target install i686-unknown-linux-gnu
     - name: Bindgen
-      run: rustup run nightly cbindgen --config cbindgen.toml
+      run: rustup toolchain install nightly && rustup run nightly cbindgen --config cbindgen.toml
     - name: Build release
       run: cargo build --release --target=i686-unknown-linux-gnu
     - uses: actions/upload-artifact@v3
@@ -50,7 +50,7 @@ jobs:
     - name: Install target
       run: sudo apt install -y gcc-aarch64-linux-gnu && rustup target install aarch64-unknown-linux-gnu
     - name: Bindgen
-      run: rustup run nightly cbindgen --config cbindgen.toml
+      run: rustup toolchain install nightly && rustup run nightly cbindgen --config cbindgen.toml
     - name: Build release
       run: cargo build --release --target=aarch64-unknown-linux-gnu
     - uses: actions/upload-artifact@v3
