@@ -50,7 +50,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Configure dependencies
-      run: sudo dpkg --add-architecture arm64 && sudo apt-get -qq update
+      run: sudo dpkg --add-architecture arm64 && sudo cp -f ./build/sources.list /etc/apt/sources.list && sudo apt-get -qq update
     - name: Install dependencies
       run: sudo apt-get install -y libxcb-shape0-dev:arm64 libxcb-xfixes0-dev:arm64 libxcb-render0-dev:arm64
     - name: Install target
